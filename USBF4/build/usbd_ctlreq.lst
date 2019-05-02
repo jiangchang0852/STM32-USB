@@ -1,0 +1,2444 @@
+ARM GAS  /tmp/cc1HyUni.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m4
+   3              		.eabi_attribute 27, 1
+   4              		.eabi_attribute 28, 1
+   5              		.fpu fpv4-sp-d16
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.thumb
+  16              		.file	"usbd_ctlreq.c"
+  17              		.text
+  18              	.Ltext0:
+  19              		.cfi_sections	.debug_frame
+  20              		.section	.text.USBD_GetLen,"ax",%progbits
+  21              		.align	2
+  22              		.thumb
+  23              		.thumb_func
+  25              	USBD_GetLen:
+  26              	.LFB136:
+  27              		.file 1 "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c"
+   1:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+   2:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   ******************************************************************************
+   3:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @file    usbd_req.c
+   4:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @author  MCD Application Team
+   5:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @version V2.4.2
+   6:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @date    11-December-2015 
+   7:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @brief   This file provides the standard USB requests following chapter 9.
+   8:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   ******************************************************************************
+   9:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @attention
+  10:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   *
+  11:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * <h2><center>&copy; COPYRIGHT 2015 STMicroelectronics</center></h2>
+  12:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   *
+  13:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  14:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * You may not use this file except in compliance with the License.
+  15:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * You may obtain a copy of the License at:
+  16:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   *
+  17:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   *        http://www.st.com/software_license_agreement_liberty_v2
+  18:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   *
+  19:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * Unless required by applicable law or agreed to in writing, software 
+  20:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * distributed under the License is distributed on an "AS IS" BASIS, 
+  21:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  22:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * See the License for the specific language governing permissions and
+  23:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * limitations under the License.
+  24:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   *
+  25:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   ******************************************************************************
+  26:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+  27:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  28:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /* Includes ------------------------------------------------------------------*/
+  29:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** #include "usbd_ctlreq.h"
+  30:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** #include "usbd_ioreq.h"
+  31:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ARM GAS  /tmp/cc1HyUni.s 			page 2
+
+
+  32:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  33:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /** @addtogroup STM32_USBD_STATE_DEVICE_LIBRARY
+  34:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @{
+  35:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */
+  36:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  37:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  38:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /** @defgroup USBD_REQ 
+  39:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @brief USB standard requests module
+  40:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @{
+  41:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+  42:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  43:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /** @defgroup USBD_REQ_Private_TypesDefinitions
+  44:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @{
+  45:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+  46:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+  47:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @}
+  48:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+  49:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  50:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  51:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /** @defgroup USBD_REQ_Private_Defines
+  52:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @{
+  53:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+  54:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  55:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+  56:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @}
+  57:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+  58:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  59:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  60:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /** @defgroup USBD_REQ_Private_Macros
+  61:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @{
+  62:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+  63:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+  64:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @}
+  65:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+  66:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  67:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  68:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /** @defgroup USBD_REQ_Private_Variables
+  69:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @{
+  70:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+  71:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+  72:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @}
+  73:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+  74:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  75:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  76:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /** @defgroup USBD_REQ_Private_FunctionPrototypes
+  77:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @{
+  78:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+  79:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev , 
+  80:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                                USBD_SetupReqTypedef *req);
+  81:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  82:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_SetAddress(USBD_HandleTypeDef *pdev , 
+  83:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                             USBD_SetupReqTypedef *req);
+  84:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  85:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_SetConfig(USBD_HandleTypeDef *pdev , 
+  86:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                            USBD_SetupReqTypedef *req);
+  87:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  88:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_GetConfig(USBD_HandleTypeDef *pdev , 
+ARM GAS  /tmp/cc1HyUni.s 			page 3
+
+
+  89:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                            USBD_SetupReqTypedef *req);
+  90:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  91:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_GetStatus(USBD_HandleTypeDef *pdev , 
+  92:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                            USBD_SetupReqTypedef *req);
+  93:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  94:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_SetFeature(USBD_HandleTypeDef *pdev , 
+  95:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                             USBD_SetupReqTypedef *req);
+  96:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  97:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_ClrFeature(USBD_HandleTypeDef *pdev , 
+  98:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                             USBD_SetupReqTypedef *req);
+  99:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 100:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static uint8_t USBD_GetLen(uint8_t *buf);
+ 101:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 102:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 103:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @}
+ 104:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+ 105:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 106:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 107:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /** @defgroup USBD_REQ_Private_Functions
+ 108:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @{
+ 109:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */ 
+ 110:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 111:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 112:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 113:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @brief  USBD_StdDevReq
+ 114:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** *         Handle standard usb device requests
+ 115:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  pdev: device instance
+ 116:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  req: usb request
+ 117:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @retval status
+ 118:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** */
+ 119:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** USBD_StatusTypeDef  USBD_StdDevReq (USBD_HandleTypeDef *pdev , USBD_SetupReqTypedef  *req)
+ 120:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 121:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   USBD_StatusTypeDef ret = USBD_OK;  
+ 122:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 123:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   switch (req->bRequest) 
+ 124:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 125:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_REQ_GET_DESCRIPTOR: 
+ 126:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 127:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_GetDescriptor (pdev, req) ;
+ 128:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 129:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 130:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_REQ_SET_ADDRESS:                      
+ 131:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_SetAddress(pdev, req);
+ 132:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 133:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 134:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_REQ_SET_CONFIGURATION:                    
+ 135:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_SetConfig (pdev , req);
+ 136:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 137:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 138:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_REQ_GET_CONFIGURATION:                 
+ 139:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_GetConfig (pdev , req);
+ 140:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 141:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 142:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_REQ_GET_STATUS:                                  
+ 143:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_GetStatus (pdev , req);
+ 144:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 145:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ARM GAS  /tmp/cc1HyUni.s 			page 4
+
+
+ 146:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 147:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_REQ_SET_FEATURE:   
+ 148:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_SetFeature (pdev , req);    
+ 149:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 150:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 151:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_REQ_CLEAR_FEATURE:                                   
+ 152:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_ClrFeature (pdev , req);
+ 153:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 154:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 155:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   default:  
+ 156:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_CtlError(pdev , req);
+ 157:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 158:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 159:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 160:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   return ret;
+ 161:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 162:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 163:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 164:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @brief  USBD_StdItfReq
+ 165:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** *         Handle standard usb interface requests
+ 166:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  pdev: device instance
+ 167:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  req: usb request
+ 168:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @retval status
+ 169:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** */
+ 170:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** USBD_StatusTypeDef  USBD_StdItfReq (USBD_HandleTypeDef *pdev , USBD_SetupReqTypedef  *req)
+ 171:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 172:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   USBD_StatusTypeDef ret = USBD_OK; 
+ 173:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 174:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   switch (pdev->dev_state) 
+ 175:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 176:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USBD_STATE_CONFIGURED:
+ 177:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 178:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     if (LOBYTE(req->wIndex) <= USBD_MAX_NUM_INTERFACES) 
+ 179:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 180:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pdev->pClass->Setup (pdev, req); 
+ 181:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 182:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       if((req->wLength == 0)&& (ret == USBD_OK))
+ 183:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 184:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****          USBD_CtlSendStatus(pdev);
+ 185:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 186:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     } 
+ 187:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     else 
+ 188:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {                                               
+ 189:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****        USBD_CtlError(pdev , req);
+ 190:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 191:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 192:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 193:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   default:
+ 194:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****      USBD_CtlError(pdev , req);
+ 195:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 196:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 197:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   return USBD_OK;
+ 198:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 199:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 200:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 201:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @brief  USBD_StdEPReq
+ 202:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** *         Handle standard usb endpoint requests
+ARM GAS  /tmp/cc1HyUni.s 			page 5
+
+
+ 203:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  pdev: device instance
+ 204:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  req: usb request
+ 205:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @retval status
+ 206:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** */
+ 207:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** USBD_StatusTypeDef  USBD_StdEPReq (USBD_HandleTypeDef *pdev , USBD_SetupReqTypedef  *req)
+ 208:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 209:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 210:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   uint8_t   ep_addr;
+ 211:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   USBD_StatusTypeDef ret = USBD_OK; 
+ 212:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   USBD_EndpointTypeDef   *pep;
+ 213:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   ep_addr  = LOBYTE(req->wIndex);   
+ 214:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 215:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   /* Check if it is a class request */
+ 216:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   if ((req->bmRequest & 0x60) == 0x20)
+ 217:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 218:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     pdev->pClass->Setup (pdev, req);
+ 219:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 220:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     return USBD_OK;
+ 221:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 222:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 223:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   switch (req->bRequest) 
+ 224:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 225:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 226:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_REQ_SET_FEATURE :
+ 227:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 228:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     switch (pdev->dev_state) 
+ 229:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 230:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_STATE_ADDRESSED:          
+ 231:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       if ((ep_addr != 0x00) && (ep_addr != 0x80)) 
+ 232:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 233:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         USBD_LL_StallEP(pdev , ep_addr);
+ 234:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 235:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;	
+ 236:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 237:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_STATE_CONFIGURED:   
+ 238:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       if (req->wValue == USB_FEATURE_EP_HALT)
+ 239:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 240:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         if ((ep_addr != 0x00) && (ep_addr != 0x80)) 
+ 241:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         { 
+ 242:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****           USBD_LL_StallEP(pdev , ep_addr);
+ 243:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****           
+ 244:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         }
+ 245:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 246:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pdev->pClass->Setup (pdev, req);   
+ 247:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlSendStatus(pdev);
+ 248:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 249:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 250:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 251:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     default:                         
+ 252:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlError(pdev , req);
+ 253:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;    
+ 254:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 255:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 256:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 257:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_REQ_CLEAR_FEATURE :
+ 258:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 259:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     switch (pdev->dev_state) 
+ARM GAS  /tmp/cc1HyUni.s 			page 6
+
+
+ 260:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 261:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_STATE_ADDRESSED:          
+ 262:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       if ((ep_addr != 0x00) && (ep_addr != 0x80)) 
+ 263:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 264:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         USBD_LL_StallEP(pdev , ep_addr);
+ 265:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 266:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;	
+ 267:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 268:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_STATE_CONFIGURED:   
+ 269:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       if (req->wValue == USB_FEATURE_EP_HALT)
+ 270:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 271:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         if ((ep_addr & 0x7F) != 0x00) 
+ 272:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         {        
+ 273:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****           USBD_LL_ClearStallEP(pdev , ep_addr);
+ 274:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****           pdev->pClass->Setup (pdev, req);
+ 275:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         }
+ 276:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         USBD_CtlSendStatus(pdev);
+ 277:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 278:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 279:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 280:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     default:                         
+ 281:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlError(pdev , req);
+ 282:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;    
+ 283:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 284:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 285:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 286:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_REQ_GET_STATUS:                  
+ 287:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     switch (pdev->dev_state) 
+ 288:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 289:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_STATE_ADDRESSED:          
+ 290:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       if ((ep_addr & 0x7F) != 0x00) 
+ 291:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 292:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         USBD_LL_StallEP(pdev , ep_addr);
+ 293:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 294:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;	
+ 295:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 296:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_STATE_CONFIGURED:
+ 297:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pep = ((ep_addr & 0x80) == 0x80) ? &pdev->ep_in[ep_addr & 0x7F]:\
+ 298:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                                          &pdev->ep_out[ep_addr & 0x7F];
+ 299:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       if(USBD_LL_IsStallEP(pdev, ep_addr))
+ 300:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 301:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         pep->status = 0x0001;     
+ 302:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 303:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       else
+ 304:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 305:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         pep->status = 0x0000;  
+ 306:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 307:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 308:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlSendData (pdev,
+ 309:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                         (uint8_t *)&pep->status,
+ 310:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                         2);
+ 311:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 312:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 313:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     default:                         
+ 314:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlError(pdev , req);
+ 315:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 316:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ARM GAS  /tmp/cc1HyUni.s 			page 7
+
+
+ 317:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 318:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 319:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   default:
+ 320:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 321:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 322:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   return ret;
+ 323:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 324:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 325:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @brief  USBD_GetDescriptor
+ 326:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** *         Handle Get Descriptor requests
+ 327:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  pdev: device instance
+ 328:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  req: usb request
+ 329:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @retval status
+ 330:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** */
+ 331:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev , 
+ 332:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                                USBD_SetupReqTypedef *req)
+ 333:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 334:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   uint16_t len;
+ 335:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   uint8_t *pbuf;
+ 336:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 337:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 338:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   switch (req->wValue >> 8)
+ 339:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   { 
+ 340:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** #if (USBD_LPM_ENABLED == 1)
+ 341:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_DESC_TYPE_BOS:
+ 342:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     pbuf = pdev->pDesc->GetBOSDescriptor(pdev->dev_speed, &len);
+ 343:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 344:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** #endif    
+ 345:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_DESC_TYPE_DEVICE:
+ 346:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     pbuf = pdev->pDesc->GetDeviceDescriptor(pdev->dev_speed, &len);
+ 347:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 348:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 349:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_DESC_TYPE_CONFIGURATION:     
+ 350:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     if(pdev->dev_speed == USBD_SPEED_HIGH )   
+ 351:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 352:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf   = (uint8_t *)pdev->pClass->GetHSConfigDescriptor(&len);
+ 353:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf[1] = USB_DESC_TYPE_CONFIGURATION;
+ 354:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 355:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     else
+ 356:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 357:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf   = (uint8_t *)pdev->pClass->GetFSConfigDescriptor(&len);
+ 358:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf[1] = USB_DESC_TYPE_CONFIGURATION;
+ 359:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 360:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 361:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 362:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_DESC_TYPE_STRING:
+ 363:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     switch ((uint8_t)(req->wValue))
+ 364:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 365:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_IDX_LANGID_STR:
+ 366:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****      pbuf = pdev->pDesc->GetLangIDStrDescriptor(pdev->dev_speed, &len);        
+ 367:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 368:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 369:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_IDX_MFC_STR:
+ 370:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf = pdev->pDesc->GetManufacturerStrDescriptor(pdev->dev_speed, &len);
+ 371:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 372:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 373:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_IDX_PRODUCT_STR:
+ARM GAS  /tmp/cc1HyUni.s 			page 8
+
+
+ 374:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf = pdev->pDesc->GetProductStrDescriptor(pdev->dev_speed, &len);
+ 375:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 376:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 377:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_IDX_SERIAL_STR:
+ 378:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf = pdev->pDesc->GetSerialStrDescriptor(pdev->dev_speed, &len);
+ 379:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 380:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 381:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_IDX_CONFIG_STR:
+ 382:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf = pdev->pDesc->GetConfigurationStrDescriptor(pdev->dev_speed, &len);
+ 383:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 384:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 385:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_IDX_INTERFACE_STR:
+ 386:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf = pdev->pDesc->GetInterfaceStrDescriptor(pdev->dev_speed, &len);
+ 387:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 388:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 389:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     default:
+ 390:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** #if (USBD_SUPPORT_USER_STRING == 1)
+ 391:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf = pdev->pClass->GetUsrStrDescriptor(pdev, (req->wValue) , &len);
+ 392:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 393:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** #else      
+ 394:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****        USBD_CtlError(pdev , req);
+ 395:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       return;
+ 396:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** #endif   
+ 397:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 398:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 399:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_DESC_TYPE_DEVICE_QUALIFIER:                   
+ 400:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 401:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     if(pdev->dev_speed == USBD_SPEED_HIGH  )   
+ 402:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 403:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf   = (uint8_t *)pdev->pClass->GetDeviceQualifierDescriptor(&len);
+ 404:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 405:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 406:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     else
+ 407:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 408:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlError(pdev , req);
+ 409:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       return;
+ 410:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     } 
+ 411:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 412:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USB_DESC_TYPE_OTHER_SPEED_CONFIGURATION:
+ 413:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     if(pdev->dev_speed == USBD_SPEED_HIGH  )   
+ 414:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 415:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf   = (uint8_t *)pdev->pClass->GetOtherSpeedConfigDescriptor(&len);
+ 416:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf[1] = USB_DESC_TYPE_OTHER_SPEED_CONFIGURATION;
+ 417:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break; 
+ 418:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 419:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     else
+ 420:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 421:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlError(pdev , req);
+ 422:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       return;
+ 423:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 424:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 425:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   default: 
+ 426:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****      USBD_CtlError(pdev , req);
+ 427:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     return;
+ 428:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 429:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 430:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   if((len != 0)&& (req->wLength != 0))
+ARM GAS  /tmp/cc1HyUni.s 			page 9
+
+
+ 431:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 432:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 433:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     len = MIN(len , req->wLength);
+ 434:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 435:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_CtlSendData (pdev, 
+ 436:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                       pbuf,
+ 437:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                       len);
+ 438:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 439:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 440:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 441:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 442:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 443:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @brief  USBD_SetAddress
+ 444:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** *         Set device address
+ 445:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  pdev: device instance
+ 446:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  req: usb request
+ 447:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @retval status
+ 448:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** */
+ 449:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_SetAddress(USBD_HandleTypeDef *pdev , 
+ 450:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                             USBD_SetupReqTypedef *req)
+ 451:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 452:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   uint8_t  dev_addr; 
+ 453:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 454:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   if ((req->wIndex == 0) && (req->wLength == 0)) 
+ 455:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 456:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     dev_addr = (uint8_t)(req->wValue) & 0x7F;     
+ 457:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 458:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     if (pdev->dev_state == USBD_STATE_CONFIGURED) 
+ 459:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 460:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlError(pdev , req);
+ 461:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     } 
+ 462:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     else 
+ 463:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 464:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pdev->dev_address = dev_addr;
+ 465:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_LL_SetUSBAddress(pdev, dev_addr);               
+ 466:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlSendStatus(pdev);                         
+ 467:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 468:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       if (dev_addr != 0) 
+ 469:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 470:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         pdev->dev_state  = USBD_STATE_ADDRESSED;
+ 471:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       } 
+ 472:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       else 
+ 473:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 474:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         pdev->dev_state  = USBD_STATE_DEFAULT; 
+ 475:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 476:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 477:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   } 
+ 478:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   else 
+ 479:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 480:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****      USBD_CtlError(pdev , req);                        
+ 481:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   } 
+ 482:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 483:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 484:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 485:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @brief  USBD_SetConfig
+ 486:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** *         Handle Set device configuration request
+ 487:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  pdev: device instance
+ARM GAS  /tmp/cc1HyUni.s 			page 10
+
+
+ 488:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  req: usb request
+ 489:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @retval status
+ 490:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** */
+ 491:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_SetConfig(USBD_HandleTypeDef *pdev , 
+ 492:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                            USBD_SetupReqTypedef *req)
+ 493:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 494:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 495:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   static uint8_t  cfgidx;
+ 496:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 497:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   cfgidx = (uint8_t)(req->wValue);                 
+ 498:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 499:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   if (cfgidx > USBD_MAX_NUM_CONFIGURATION ) 
+ 500:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {            
+ 501:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****      USBD_CtlError(pdev , req);                              
+ 502:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   } 
+ 503:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   else 
+ 504:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 505:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     switch (pdev->dev_state) 
+ 506:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 507:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_STATE_ADDRESSED:
+ 508:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       if (cfgidx) 
+ 509:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {                                			   							   							   				
+ 510:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         pdev->dev_config = cfgidx;
+ 511:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         pdev->dev_state = USBD_STATE_CONFIGURED;
+ 512:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         if(USBD_SetClassConfig(pdev , cfgidx) == USBD_FAIL)
+ 513:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         {
+ 514:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****           USBD_CtlError(pdev , req);  
+ 515:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****           return;
+ 516:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         }
+ 517:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         USBD_CtlSendStatus(pdev);
+ 518:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 519:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       else 
+ 520:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 521:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****          USBD_CtlSendStatus(pdev);
+ 522:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 523:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 524:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 525:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_STATE_CONFIGURED:
+ 526:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       if (cfgidx == 0) 
+ 527:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {                           
+ 528:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         pdev->dev_state = USBD_STATE_ADDRESSED;
+ 529:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         pdev->dev_config = cfgidx;          
+ 530:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         USBD_ClrClassConfig(pdev , cfgidx);
+ 531:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         USBD_CtlSendStatus(pdev);
+ 532:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         
+ 533:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       } 
+ 534:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       else  if (cfgidx != pdev->dev_config) 
+ 535:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 536:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         /* Clear old configuration */
+ 537:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         USBD_ClrClassConfig(pdev , pdev->dev_config);
+ 538:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         
+ 539:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         /* set new configuration */
+ 540:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         pdev->dev_config = cfgidx;
+ 541:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         if(USBD_SetClassConfig(pdev , cfgidx) == USBD_FAIL)
+ 542:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         {
+ 543:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****           USBD_CtlError(pdev , req);  
+ 544:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****           return;
+ARM GAS  /tmp/cc1HyUni.s 			page 11
+
+
+ 545:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         }
+ 546:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         USBD_CtlSendStatus(pdev);
+ 547:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 548:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       else
+ 549:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 550:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         USBD_CtlSendStatus(pdev);
+ 551:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 552:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 553:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 554:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     default:					
+ 555:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****        USBD_CtlError(pdev , req);                     
+ 556:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 557:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 558:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 559:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 560:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 561:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 562:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @brief  USBD_GetConfig
+ 563:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** *         Handle Get device configuration request
+ 564:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  pdev: device instance
+ 565:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  req: usb request
+ 566:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @retval status
+ 567:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** */
+ 568:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_GetConfig(USBD_HandleTypeDef *pdev , 
+ 569:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                            USBD_SetupReqTypedef *req)
+ 570:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 571:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 572:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   if (req->wLength != 1) 
+ 573:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {                   
+ 574:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****      USBD_CtlError(pdev , req);
+ 575:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 576:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   else 
+ 577:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 578:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     switch (pdev->dev_state )  
+ 579:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 580:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_STATE_ADDRESSED:                     
+ 581:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pdev->dev_default_config = 0;
+ 582:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlSendData (pdev, 
+ 583:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                         (uint8_t *)&pdev->dev_default_config,
+ 584:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                         1);
+ 585:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 586:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 587:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     case USBD_STATE_CONFIGURED:   
+ 588:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 589:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlSendData (pdev, 
+ 590:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                         (uint8_t *)&pdev->dev_config,
+ 591:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                         1);
+ 592:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 593:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 594:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     default:
+ 595:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****        USBD_CtlError(pdev , req);
+ 596:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 597:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 598:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 599:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 600:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 601:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ARM GAS  /tmp/cc1HyUni.s 			page 12
+
+
+ 602:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @brief  USBD_GetStatus
+ 603:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** *         Handle Get Status request
+ 604:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  pdev: device instance
+ 605:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  req: usb request
+ 606:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @retval status
+ 607:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** */
+ 608:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_GetStatus(USBD_HandleTypeDef *pdev , 
+ 609:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                            USBD_SetupReqTypedef *req)
+ 610:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 611:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 612:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 613:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   switch (pdev->dev_state) 
+ 614:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 615:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USBD_STATE_ADDRESSED:
+ 616:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USBD_STATE_CONFIGURED:
+ 617:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 618:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** #if ( USBD_SELF_POWERED == 1)
+ 619:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     pdev->dev_config_status = USB_CONFIG_SELF_POWERED;                                  
+ 620:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** #else
+ 621:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     pdev->dev_config_status = 0;                                   
+ 622:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** #endif
+ 623:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                       
+ 624:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     if (pdev->dev_remote_wakeup) 
+ 625:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 626:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****        pdev->dev_config_status |= USB_CONFIG_REMOTE_WAKEUP;                                
+ 627:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 628:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 629:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_CtlSendData (pdev, 
+ 630:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                       (uint8_t *)& pdev->dev_config_status,
+ 631:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                       2);
+ 632:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 633:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 634:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   default :
+ 635:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_CtlError(pdev , req);                        
+ 636:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 637:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 638:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 639:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 640:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 641:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 642:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @brief  USBD_SetFeature
+ 643:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** *         Handle Set device feature request
+ 644:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  pdev: device instance
+ 645:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  req: usb request
+ 646:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @retval status
+ 647:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** */
+ 648:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_SetFeature(USBD_HandleTypeDef *pdev , 
+ 649:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                             USBD_SetupReqTypedef *req)
+ 650:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 651:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 652:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   if (req->wValue == USB_FEATURE_REMOTE_WAKEUP)
+ 653:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 654:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     pdev->dev_remote_wakeup = 1;  
+ 655:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     pdev->pClass->Setup (pdev, req);   
+ 656:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_CtlSendStatus(pdev);
+ 657:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 658:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ARM GAS  /tmp/cc1HyUni.s 			page 13
+
+
+ 659:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 660:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 661:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 662:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 663:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @brief  USBD_ClrFeature
+ 664:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** *         Handle clear device feature request
+ 665:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  pdev: device instance
+ 666:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  req: usb request
+ 667:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @retval status
+ 668:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** */
+ 669:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static void USBD_ClrFeature(USBD_HandleTypeDef *pdev , 
+ 670:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                             USBD_SetupReqTypedef *req)
+ 671:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 672:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   switch (pdev->dev_state)
+ 673:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 674:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USBD_STATE_ADDRESSED:
+ 675:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   case USBD_STATE_CONFIGURED:
+ 676:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     if (req->wValue == USB_FEATURE_REMOTE_WAKEUP) 
+ 677:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 678:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pdev->dev_remote_wakeup = 0; 
+ 679:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pdev->pClass->Setup (pdev, req);   
+ 680:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlSendStatus(pdev);
+ 681:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 682:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 683:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 684:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   default :
+ 685:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****      USBD_CtlError(pdev , req);
+ 686:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 687:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 688:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 689:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 690:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 691:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @brief  USBD_ParseSetupRequest 
+ 692:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** *         Copy buffer into setup structure
+ 693:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  pdev: device instance
+ 694:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  req: usb request
+ 695:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @retval None
+ 696:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** */
+ 697:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 698:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** void USBD_ParseSetupRequest(USBD_SetupReqTypedef *req, uint8_t *pdata)
+ 699:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 700:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   req->bmRequest     = *(uint8_t *)  (pdata);
+ 701:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   req->bRequest      = *(uint8_t *)  (pdata +  1);
+ 702:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   req->wValue        = SWAPBYTE      (pdata +  2);
+ 703:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   req->wIndex        = SWAPBYTE      (pdata +  4);
+ 704:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   req->wLength       = SWAPBYTE      (pdata +  6);
+ 705:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 706:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 707:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 708:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 709:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @brief  USBD_CtlError 
+ 710:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** *         Handle USB low level Error
+ 711:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  pdev: device instance
+ 712:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @param  req: usb request
+ 713:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** * @retval None
+ 714:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** */
+ 715:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ARM GAS  /tmp/cc1HyUni.s 			page 14
+
+
+ 716:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** void USBD_CtlError( USBD_HandleTypeDef *pdev ,
+ 717:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                             USBD_SetupReqTypedef *req)
+ 718:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 719:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   USBD_LL_StallEP(pdev , 0x80);
+ 720:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   USBD_LL_StallEP(pdev , 0);
+ 721:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 722:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 723:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 724:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 725:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @brief  USBD_GetString
+ 726:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   *         Convert Ascii string into unicode one
+ 727:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @param  desc : descriptor buffer
+ 728:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @param  unicode : Formatted string buffer (unicode)
+ 729:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @param  len : descriptor length
+ 730:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @retval None
+ 731:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */
+ 732:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** void USBD_GetString(uint8_t *desc, uint8_t *unicode, uint16_t *len)
+ 733:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+ 734:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   uint8_t idx = 0;
+ 735:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 736:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   if (desc != NULL) 
+ 737:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 738:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     *len =  USBD_GetLen(desc) * 2 + 2;    
+ 739:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     unicode[idx++] = *len;
+ 740:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     unicode[idx++] =  USB_DESC_TYPE_STRING;
+ 741:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 742:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     while (*desc != '\0') 
+ 743:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 744:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       unicode[idx++] = *desc++;
+ 745:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       unicode[idx++] =  0x00;
+ 746:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 747:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   } 
+ 748:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 749:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 750:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 751:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @brief  USBD_GetLen
+ 752:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   *         return the string length
+ 753:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****    * @param  buf : pointer to the ascii string buffer
+ 754:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   * @retval string length
+ 755:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   */
+ 756:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** static uint8_t USBD_GetLen(uint8_t *buf)
+ 757:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** {
+  28              		.loc 1 757 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              	.LVL0:
+  34 0000 0346     		mov	r3, r0
+  35              	.LVL1:
+ 758:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     uint8_t  len = 0;
+  36              		.loc 1 758 0
+  37 0002 0020     		movs	r0, #0
+  38              	.LVL2:
+ 759:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 760:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     while (*buf != '\0') 
+  39              		.loc 1 760 0
+ARM GAS  /tmp/cc1HyUni.s 			page 15
+
+
+  40 0004 02E0     		b	.L2
+  41              	.LVL3:
+  42              	.L3:
+ 761:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 762:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         len++;
+  43              		.loc 1 762 0
+  44 0006 0130     		adds	r0, r0, #1
+  45              	.LVL4:
+  46 0008 C0B2     		uxtb	r0, r0
+  47              	.LVL5:
+ 763:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         buf++;
+  48              		.loc 1 763 0
+  49 000a 0133     		adds	r3, r3, #1
+  50              	.LVL6:
+  51              	.L2:
+ 760:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+  52              		.loc 1 760 0
+  53 000c 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+  54 000e 002A     		cmp	r2, #0
+  55 0010 F9D1     		bne	.L3
+ 764:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 765:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 766:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     return len;
+ 767:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+  56              		.loc 1 767 0
+  57 0012 7047     		bx	lr
+  58              		.cfi_endproc
+  59              	.LFE136:
+  61              		.section	.text.USBD_SetFeature,"ax",%progbits
+  62              		.align	2
+  63              		.thumb
+  64              		.thumb_func
+  66              	USBD_SetFeature:
+  67              	.LFB131:
+ 650:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  68              		.loc 1 650 0
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 0
+  71              		@ frame_needed = 0, uses_anonymous_args = 0
+  72              	.LVL7:
+ 652:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+  73              		.loc 1 652 0
+  74 0000 4B88     		ldrh	r3, [r1, #2]
+  75 0002 012B     		cmp	r3, #1
+  76 0004 0BD1     		bne	.L7
+ 650:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+  77              		.loc 1 650 0
+  78 0006 10B5     		push	{r4, lr}
+  79              	.LCFI0:
+  80              		.cfi_def_cfa_offset 8
+  81              		.cfi_offset 4, -8
+  82              		.cfi_offset 14, -4
+  83 0008 0446     		mov	r4, r0
+ 654:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     pdev->pClass->Setup (pdev, req);   
+  84              		.loc 1 654 0
+  85 000a C0F80432 		str	r3, [r0, #516]
+ 655:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     USBD_CtlSendStatus(pdev);
+ARM GAS  /tmp/cc1HyUni.s 			page 16
+
+
+  86              		.loc 1 655 0
+  87 000e D0F81432 		ldr	r3, [r0, #532]
+  88 0012 9B68     		ldr	r3, [r3, #8]
+  89 0014 9847     		blx	r3
+  90              	.LVL8:
+ 656:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+  91              		.loc 1 656 0
+  92 0016 2046     		mov	r0, r4
+  93 0018 FFF7FEFF 		bl	USBD_CtlSendStatus
+  94              	.LVL9:
+  95 001c 10BD     		pop	{r4, pc}
+  96              	.LVL10:
+  97              	.L7:
+  98              	.LCFI1:
+  99              		.cfi_def_cfa_offset 0
+ 100              		.cfi_restore 4
+ 101              		.cfi_restore 14
+ 102 001e 7047     		bx	lr
+ 103              		.cfi_endproc
+ 104              	.LFE131:
+ 106              		.section	.text.USBD_ParseSetupRequest,"ax",%progbits
+ 107              		.align	2
+ 108              		.global	USBD_ParseSetupRequest
+ 109              		.thumb
+ 110              		.thumb_func
+ 112              	USBD_ParseSetupRequest:
+ 113              	.LFB133:
+ 699:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   req->bmRequest     = *(uint8_t *)  (pdata);
+ 114              		.loc 1 699 0
+ 115              		.cfi_startproc
+ 116              		@ args = 0, pretend = 0, frame = 0
+ 117              		@ frame_needed = 0, uses_anonymous_args = 0
+ 118              		@ link register save eliminated.
+ 119              	.LVL11:
+ 700:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   req->bRequest      = *(uint8_t *)  (pdata +  1);
+ 120              		.loc 1 700 0
+ 121 0000 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+ 122 0002 0370     		strb	r3, [r0]
+ 701:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   req->wValue        = SWAPBYTE      (pdata +  2);
+ 123              		.loc 1 701 0
+ 124 0004 4B78     		ldrb	r3, [r1, #1]	@ zero_extendqisi2
+ 125 0006 4370     		strb	r3, [r0, #1]
+ 702:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   req->wIndex        = SWAPBYTE      (pdata +  4);
+ 126              		.loc 1 702 0
+ 127 0008 8B78     		ldrb	r3, [r1, #2]	@ zero_extendqisi2
+ 128 000a CA78     		ldrb	r2, [r1, #3]	@ zero_extendqisi2
+ 129 000c 03EB0223 		add	r3, r3, r2, lsl #8
+ 130 0010 4380     		strh	r3, [r0, #2]	@ movhi
+ 703:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   req->wLength       = SWAPBYTE      (pdata +  6);
+ 131              		.loc 1 703 0
+ 132 0012 0B79     		ldrb	r3, [r1, #4]	@ zero_extendqisi2
+ 133 0014 4A79     		ldrb	r2, [r1, #5]	@ zero_extendqisi2
+ 134 0016 03EB0223 		add	r3, r3, r2, lsl #8
+ 135 001a 8380     		strh	r3, [r0, #4]	@ movhi
+ 704:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 136              		.loc 1 704 0
+ 137 001c 8B79     		ldrb	r3, [r1, #6]	@ zero_extendqisi2
+ARM GAS  /tmp/cc1HyUni.s 			page 17
+
+
+ 138 001e CA79     		ldrb	r2, [r1, #7]	@ zero_extendqisi2
+ 139 0020 03EB0223 		add	r3, r3, r2, lsl #8
+ 140 0024 C380     		strh	r3, [r0, #6]	@ movhi
+ 141 0026 7047     		bx	lr
+ 142              		.cfi_endproc
+ 143              	.LFE133:
+ 145              		.section	.text.USBD_CtlError,"ax",%progbits
+ 146              		.align	2
+ 147              		.global	USBD_CtlError
+ 148              		.thumb
+ 149              		.thumb_func
+ 151              	USBD_CtlError:
+ 152              	.LFB134:
+ 718:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   USBD_LL_StallEP(pdev , 0x80);
+ 153              		.loc 1 718 0
+ 154              		.cfi_startproc
+ 155              		@ args = 0, pretend = 0, frame = 0
+ 156              		@ frame_needed = 0, uses_anonymous_args = 0
+ 157              	.LVL12:
+ 158 0000 10B5     		push	{r4, lr}
+ 159              	.LCFI2:
+ 160              		.cfi_def_cfa_offset 8
+ 161              		.cfi_offset 4, -8
+ 162              		.cfi_offset 14, -4
+ 163 0002 0446     		mov	r4, r0
+ 719:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   USBD_LL_StallEP(pdev , 0);
+ 164              		.loc 1 719 0
+ 165 0004 8021     		movs	r1, #128
+ 166              	.LVL13:
+ 167 0006 FFF7FEFF 		bl	USBD_LL_StallEP
+ 168              	.LVL14:
+ 720:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** }
+ 169              		.loc 1 720 0
+ 170 000a 2046     		mov	r0, r4
+ 171 000c 0021     		movs	r1, #0
+ 172 000e FFF7FEFF 		bl	USBD_LL_StallEP
+ 173              	.LVL15:
+ 174 0012 10BD     		pop	{r4, pc}
+ 175              		.cfi_endproc
+ 176              	.LFE134:
+ 178              		.section	.text.USBD_GetDescriptor,"ax",%progbits
+ 179              		.align	2
+ 180              		.thumb
+ 181              		.thumb_func
+ 183              	USBD_GetDescriptor:
+ 184              	.LFB126:
+ 333:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   uint16_t len;
+ 185              		.loc 1 333 0
+ 186              		.cfi_startproc
+ 187              		@ args = 0, pretend = 0, frame = 8
+ 188              		@ frame_needed = 0, uses_anonymous_args = 0
+ 189              	.LVL16:
+ 190 0000 30B5     		push	{r4, r5, lr}
+ 191              	.LCFI3:
+ 192              		.cfi_def_cfa_offset 12
+ 193              		.cfi_offset 4, -12
+ 194              		.cfi_offset 5, -8
+ARM GAS  /tmp/cc1HyUni.s 			page 18
+
+
+ 195              		.cfi_offset 14, -4
+ 196 0002 83B0     		sub	sp, sp, #12
+ 197              	.LCFI4:
+ 198              		.cfi_def_cfa_offset 24
+ 199 0004 0446     		mov	r4, r0
+ 200 0006 0D46     		mov	r5, r1
+ 338:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   { 
+ 201              		.loc 1 338 0
+ 202 0008 4A88     		ldrh	r2, [r1, #2]
+ 203 000a 130A     		lsrs	r3, r2, #8
+ 204 000c 013B     		subs	r3, r3, #1
+ 205 000e 062B     		cmp	r3, #6
+ 206 0010 00F28580 		bhi	.L12
+ 207 0014 DFE803F0 		tbb	[pc, r3]
+ 208              	.LVL17:
+ 209              	.L14:
+ 210 0018 04       		.byte	(.L13-.L14)/2
+ 211 0019 0D       		.byte	(.L15-.L14)/2
+ 212 001a 23       		.byte	(.L16-.L14)/2
+ 213 001b 83       		.byte	(.L12-.L14)/2
+ 214 001c 83       		.byte	(.L12-.L14)/2
+ 215 001d 65       		.byte	(.L17-.L14)/2
+ 216 001e 73       		.byte	(.L18-.L14)/2
+ 217 001f 00       		.p2align 1
+ 218              	.L13:
+ 346:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 219              		.loc 1 346 0
+ 220 0020 D0F81032 		ldr	r3, [r0, #528]
+ 221 0024 1B68     		ldr	r3, [r3]
+ 222 0026 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 223              	.LVL18:
+ 224 0028 0DF10601 		add	r1, sp, #6
+ 225 002c 9847     		blx	r3
+ 226              	.LVL19:
+ 227 002e 0146     		mov	r1, r0
+ 228              	.LVL20:
+ 347:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 229              		.loc 1 347 0
+ 230 0030 79E0     		b	.L19
+ 231              	.LVL21:
+ 232              	.L15:
+ 350:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 233              		.loc 1 350 0
+ 234 0032 037C     		ldrb	r3, [r0, #16]	@ zero_extendqisi2
+ 235 0034 4BB9     		cbnz	r3, .L20
+ 352:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf[1] = USB_DESC_TYPE_CONFIGURATION;
+ 236              		.loc 1 352 0
+ 237 0036 D0F81432 		ldr	r3, [r0, #532]
+ 238 003a 9B6A     		ldr	r3, [r3, #40]
+ 239 003c 0DF10600 		add	r0, sp, #6
+ 240              	.LVL22:
+ 241 0040 9847     		blx	r3
+ 242              	.LVL23:
+ 243 0042 0146     		mov	r1, r0
+ 244              	.LVL24:
+ 353:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 245              		.loc 1 353 0
+ARM GAS  /tmp/cc1HyUni.s 			page 19
+
+
+ 246 0044 0223     		movs	r3, #2
+ 247 0046 4370     		strb	r3, [r0, #1]
+ 248 0048 6DE0     		b	.L19
+ 249              	.LVL25:
+ 250              	.L20:
+ 357:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf[1] = USB_DESC_TYPE_CONFIGURATION;
+ 251              		.loc 1 357 0
+ 252 004a D0F81432 		ldr	r3, [r0, #532]
+ 253 004e DB6A     		ldr	r3, [r3, #44]
+ 254 0050 0DF10600 		add	r0, sp, #6
+ 255              	.LVL26:
+ 256 0054 9847     		blx	r3
+ 257              	.LVL27:
+ 258 0056 0146     		mov	r1, r0
+ 259              	.LVL28:
+ 358:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 260              		.loc 1 358 0
+ 261 0058 0223     		movs	r3, #2
+ 262 005a 4370     		strb	r3, [r0, #1]
+ 263 005c 63E0     		b	.L19
+ 264              	.LVL29:
+ 265              	.L16:
+ 363:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 266              		.loc 1 363 0
+ 267 005e D2B2     		uxtb	r2, r2
+ 268 0060 052A     		cmp	r2, #5
+ 269 0062 3AD8     		bhi	.L21
+ 270 0064 DFE802F0 		tbb	[pc, r2]
+ 271              	.L23:
+ 272 0068 03       		.byte	(.L22-.L23)/2
+ 273 0069 0C       		.byte	(.L24-.L23)/2
+ 274 006a 15       		.byte	(.L25-.L23)/2
+ 275 006b 1E       		.byte	(.L26-.L23)/2
+ 276 006c 27       		.byte	(.L27-.L23)/2
+ 277 006d 30       		.byte	(.L28-.L23)/2
+ 278              		.p2align 1
+ 279              	.L22:
+ 366:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 280              		.loc 1 366 0
+ 281 006e D0F81032 		ldr	r3, [r0, #528]
+ 282 0072 5B68     		ldr	r3, [r3, #4]
+ 283 0074 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 284              	.LVL30:
+ 285 0076 0DF10601 		add	r1, sp, #6
+ 286 007a 9847     		blx	r3
+ 287              	.LVL31:
+ 288 007c 0146     		mov	r1, r0
+ 289              	.LVL32:
+ 367:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 290              		.loc 1 367 0
+ 291 007e 52E0     		b	.L19
+ 292              	.LVL33:
+ 293              	.L24:
+ 370:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 294              		.loc 1 370 0
+ 295 0080 D0F81032 		ldr	r3, [r0, #528]
+ 296 0084 9B68     		ldr	r3, [r3, #8]
+ARM GAS  /tmp/cc1HyUni.s 			page 20
+
+
+ 297 0086 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 298              	.LVL34:
+ 299 0088 0DF10601 		add	r1, sp, #6
+ 300 008c 9847     		blx	r3
+ 301              	.LVL35:
+ 302 008e 0146     		mov	r1, r0
+ 303              	.LVL36:
+ 371:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 304              		.loc 1 371 0
+ 305 0090 49E0     		b	.L19
+ 306              	.LVL37:
+ 307              	.L25:
+ 374:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 308              		.loc 1 374 0
+ 309 0092 D0F81032 		ldr	r3, [r0, #528]
+ 310 0096 DB68     		ldr	r3, [r3, #12]
+ 311 0098 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 312              	.LVL38:
+ 313 009a 0DF10601 		add	r1, sp, #6
+ 314 009e 9847     		blx	r3
+ 315              	.LVL39:
+ 316 00a0 0146     		mov	r1, r0
+ 317              	.LVL40:
+ 375:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 318              		.loc 1 375 0
+ 319 00a2 40E0     		b	.L19
+ 320              	.LVL41:
+ 321              	.L26:
+ 378:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 322              		.loc 1 378 0
+ 323 00a4 D0F81032 		ldr	r3, [r0, #528]
+ 324 00a8 1B69     		ldr	r3, [r3, #16]
+ 325 00aa 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 326              	.LVL42:
+ 327 00ac 0DF10601 		add	r1, sp, #6
+ 328 00b0 9847     		blx	r3
+ 329              	.LVL43:
+ 330 00b2 0146     		mov	r1, r0
+ 331              	.LVL44:
+ 379:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 332              		.loc 1 379 0
+ 333 00b4 37E0     		b	.L19
+ 334              	.LVL45:
+ 335              	.L27:
+ 382:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 336              		.loc 1 382 0
+ 337 00b6 D0F81032 		ldr	r3, [r0, #528]
+ 338 00ba 5B69     		ldr	r3, [r3, #20]
+ 339 00bc 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 340              	.LVL46:
+ 341 00be 0DF10601 		add	r1, sp, #6
+ 342 00c2 9847     		blx	r3
+ 343              	.LVL47:
+ 344 00c4 0146     		mov	r1, r0
+ 345              	.LVL48:
+ 383:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 346              		.loc 1 383 0
+ARM GAS  /tmp/cc1HyUni.s 			page 21
+
+
+ 347 00c6 2EE0     		b	.L19
+ 348              	.LVL49:
+ 349              	.L28:
+ 386:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 350              		.loc 1 386 0
+ 351 00c8 D0F81032 		ldr	r3, [r0, #528]
+ 352 00cc 9B69     		ldr	r3, [r3, #24]
+ 353 00ce 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 354              	.LVL50:
+ 355 00d0 0DF10601 		add	r1, sp, #6
+ 356 00d4 9847     		blx	r3
+ 357              	.LVL51:
+ 358 00d6 0146     		mov	r1, r0
+ 359              	.LVL52:
+ 387:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 360              		.loc 1 387 0
+ 361 00d8 25E0     		b	.L19
+ 362              	.LVL53:
+ 363              	.L21:
+ 394:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       return;
+ 364              		.loc 1 394 0
+ 365 00da 2946     		mov	r1, r5
+ 366 00dc FFF7FEFF 		bl	USBD_CtlError
+ 367              	.LVL54:
+ 395:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** #endif   
+ 368              		.loc 1 395 0
+ 369 00e0 2EE0     		b	.L11
+ 370              	.LVL55:
+ 371              	.L17:
+ 401:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 372              		.loc 1 401 0
+ 373 00e2 037C     		ldrb	r3, [r0, #16]	@ zero_extendqisi2
+ 374 00e4 3BB9     		cbnz	r3, .L30
+ 403:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 375              		.loc 1 403 0
+ 376 00e6 D0F81432 		ldr	r3, [r0, #532]
+ 377 00ea 5B6B     		ldr	r3, [r3, #52]
+ 378 00ec 0DF10600 		add	r0, sp, #6
+ 379              	.LVL56:
+ 380 00f0 9847     		blx	r3
+ 381              	.LVL57:
+ 382 00f2 0146     		mov	r1, r0
+ 383              	.LVL58:
+ 404:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 384              		.loc 1 404 0
+ 385 00f4 17E0     		b	.L19
+ 386              	.LVL59:
+ 387              	.L30:
+ 408:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       return;
+ 388              		.loc 1 408 0
+ 389 00f6 2946     		mov	r1, r5
+ 390 00f8 FFF7FEFF 		bl	USBD_CtlError
+ 391              	.LVL60:
+ 409:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     } 
+ 392              		.loc 1 409 0
+ 393 00fc 20E0     		b	.L11
+ 394              	.LVL61:
+ARM GAS  /tmp/cc1HyUni.s 			page 22
+
+
+ 395              	.L18:
+ 413:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 396              		.loc 1 413 0
+ 397 00fe 037C     		ldrb	r3, [r0, #16]	@ zero_extendqisi2
+ 398 0100 4BB9     		cbnz	r3, .L31
+ 415:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pbuf[1] = USB_DESC_TYPE_OTHER_SPEED_CONFIGURATION;
+ 399              		.loc 1 415 0
+ 400 0102 D0F81432 		ldr	r3, [r0, #532]
+ 401 0106 1B6B     		ldr	r3, [r3, #48]
+ 402 0108 0DF10600 		add	r0, sp, #6
+ 403              	.LVL62:
+ 404 010c 9847     		blx	r3
+ 405              	.LVL63:
+ 406 010e 0146     		mov	r1, r0
+ 407              	.LVL64:
+ 416:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break; 
+ 408              		.loc 1 416 0
+ 409 0110 0723     		movs	r3, #7
+ 410 0112 4370     		strb	r3, [r0, #1]
+ 417:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 411              		.loc 1 417 0
+ 412 0114 07E0     		b	.L19
+ 413              	.LVL65:
+ 414              	.L31:
+ 421:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       return;
+ 415              		.loc 1 421 0
+ 416 0116 2946     		mov	r1, r5
+ 417 0118 FFF7FEFF 		bl	USBD_CtlError
+ 418              	.LVL66:
+ 422:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 419              		.loc 1 422 0
+ 420 011c 10E0     		b	.L11
+ 421              	.LVL67:
+ 422              	.L12:
+ 426:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     return;
+ 423              		.loc 1 426 0
+ 424 011e 2946     		mov	r1, r5
+ 425 0120 FFF7FEFF 		bl	USBD_CtlError
+ 426              	.LVL68:
+ 427:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 427              		.loc 1 427 0
+ 428 0124 0CE0     		b	.L11
+ 429              	.LVL69:
+ 430              	.L19:
+ 430:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 431              		.loc 1 430 0
+ 432 0126 BDF80630 		ldrh	r3, [sp, #6]
+ 433 012a 4BB1     		cbz	r3, .L11
+ 430:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 434              		.loc 1 430 0 is_stmt 0 discriminator 1
+ 435 012c EA88     		ldrh	r2, [r5, #6]
+ 436 012e 3AB1     		cbz	r2, .L11
+ 433:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 437              		.loc 1 433 0 is_stmt 1
+ 438 0130 9A42     		cmp	r2, r3
+ 439 0132 28BF     		it	cs
+ 440 0134 1A46     		movcs	r2, r3
+ARM GAS  /tmp/cc1HyUni.s 			page 23
+
+
+ 441 0136 ADF80620 		strh	r2, [sp, #6]	@ movhi
+ 435:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                       pbuf,
+ 442              		.loc 1 435 0
+ 443 013a 2046     		mov	r0, r4
+ 444              	.LVL70:
+ 445 013c FFF7FEFF 		bl	USBD_CtlSendData
+ 446              	.LVL71:
+ 447              	.L11:
+ 440:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 448              		.loc 1 440 0
+ 449 0140 03B0     		add	sp, sp, #12
+ 450              	.LCFI5:
+ 451              		.cfi_def_cfa_offset 12
+ 452              		@ sp needed
+ 453 0142 30BD     		pop	{r4, r5, pc}
+ 454              		.cfi_endproc
+ 455              	.LFE126:
+ 457              		.section	.text.USBD_SetAddress,"ax",%progbits
+ 458              		.align	2
+ 459              		.thumb
+ 460              		.thumb_func
+ 462              	USBD_SetAddress:
+ 463              	.LFB127:
+ 451:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   uint8_t  dev_addr; 
+ 464              		.loc 1 451 0
+ 465              		.cfi_startproc
+ 466              		@ args = 0, pretend = 0, frame = 0
+ 467              		@ frame_needed = 0, uses_anonymous_args = 0
+ 468              	.LVL72:
+ 469 0000 38B5     		push	{r3, r4, r5, lr}
+ 470              	.LCFI6:
+ 471              		.cfi_def_cfa_offset 16
+ 472              		.cfi_offset 3, -16
+ 473              		.cfi_offset 4, -12
+ 474              		.cfi_offset 5, -8
+ 475              		.cfi_offset 14, -4
+ 476 0002 0446     		mov	r4, r0
+ 454:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 477              		.loc 1 454 0
+ 478 0004 8B88     		ldrh	r3, [r1, #4]
+ 479 0006 E3B9     		cbnz	r3, .L36
+ 454:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 480              		.loc 1 454 0 is_stmt 0 discriminator 1
+ 481 0008 CB88     		ldrh	r3, [r1, #6]
+ 482 000a D3B9     		cbnz	r3, .L36
+ 456:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 483              		.loc 1 456 0 is_stmt 1
+ 484 000c 8D78     		ldrb	r5, [r1, #2]	@ zero_extendqisi2
+ 485 000e 05F07F05 		and	r5, r5, #127
+ 486              	.LVL73:
+ 458:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 487              		.loc 1 458 0
+ 488 0012 90F8FC31 		ldrb	r3, [r0, #508]	@ zero_extendqisi2
+ 489 0016 032B     		cmp	r3, #3
+ 490 0018 02D1     		bne	.L37
+ 460:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     } 
+ 491              		.loc 1 460 0
+ARM GAS  /tmp/cc1HyUni.s 			page 24
+
+
+ 492 001a FFF7FEFF 		bl	USBD_CtlError
+ 493              	.LVL74:
+ 494 001e 38BD     		pop	{r3, r4, r5, pc}
+ 495              	.LVL75:
+ 496              	.L37:
+ 464:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_LL_SetUSBAddress(pdev, dev_addr);               
+ 497              		.loc 1 464 0
+ 498 0020 80F8FE51 		strb	r5, [r0, #510]
+ 465:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlSendStatus(pdev);                         
+ 499              		.loc 1 465 0
+ 500 0024 2946     		mov	r1, r5
+ 501              	.LVL76:
+ 502 0026 FFF7FEFF 		bl	USBD_LL_SetUSBAddress
+ 503              	.LVL77:
+ 466:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 504              		.loc 1 466 0
+ 505 002a 2046     		mov	r0, r4
+ 506 002c FFF7FEFF 		bl	USBD_CtlSendStatus
+ 507              	.LVL78:
+ 468:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 508              		.loc 1 468 0
+ 509 0030 1DB1     		cbz	r5, .L39
+ 470:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       } 
+ 510              		.loc 1 470 0
+ 511 0032 0223     		movs	r3, #2
+ 512 0034 84F8FC31 		strb	r3, [r4, #508]
+ 513 0038 38BD     		pop	{r3, r4, r5, pc}
+ 514              	.LVL79:
+ 515              	.L39:
+ 474:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 516              		.loc 1 474 0
+ 517 003a 0123     		movs	r3, #1
+ 518 003c 84F8FC31 		strb	r3, [r4, #508]
+ 519 0040 38BD     		pop	{r3, r4, r5, pc}
+ 520              	.LVL80:
+ 521              	.L36:
+ 480:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   } 
+ 522              		.loc 1 480 0
+ 523 0042 2046     		mov	r0, r4
+ 524              	.LVL81:
+ 525 0044 FFF7FEFF 		bl	USBD_CtlError
+ 526              	.LVL82:
+ 527 0048 38BD     		pop	{r3, r4, r5, pc}
+ 528              		.cfi_endproc
+ 529              	.LFE127:
+ 531 004a 00BF     		.section	.text.USBD_SetConfig,"ax",%progbits
+ 532              		.align	2
+ 533              		.thumb
+ 534              		.thumb_func
+ 536              	USBD_SetConfig:
+ 537              	.LFB128:
+ 493:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 538              		.loc 1 493 0
+ 539              		.cfi_startproc
+ 540              		@ args = 0, pretend = 0, frame = 0
+ 541              		@ frame_needed = 0, uses_anonymous_args = 0
+ 542              	.LVL83:
+ARM GAS  /tmp/cc1HyUni.s 			page 25
+
+
+ 543 0000 38B5     		push	{r3, r4, r5, lr}
+ 544              	.LCFI7:
+ 545              		.cfi_def_cfa_offset 16
+ 546              		.cfi_offset 3, -16
+ 547              		.cfi_offset 4, -12
+ 548              		.cfi_offset 5, -8
+ 549              		.cfi_offset 14, -4
+ 550 0002 0446     		mov	r4, r0
+ 551 0004 0D46     		mov	r5, r1
+ 497:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 552              		.loc 1 497 0
+ 553 0006 8978     		ldrb	r1, [r1, #2]	@ zero_extendqisi2
+ 554              	.LVL84:
+ 555 0008 264B     		ldr	r3, .L54
+ 556 000a 1970     		strb	r1, [r3]
+ 499:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {            
+ 557              		.loc 1 499 0
+ 558 000c 0129     		cmp	r1, #1
+ 559 000e 03D9     		bls	.L42
+ 501:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   } 
+ 560              		.loc 1 501 0
+ 561 0010 2946     		mov	r1, r5
+ 562 0012 FFF7FEFF 		bl	USBD_CtlError
+ 563              	.LVL85:
+ 564 0016 38BD     		pop	{r3, r4, r5, pc}
+ 565              	.LVL86:
+ 566              	.L42:
+ 505:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 567              		.loc 1 505 0
+ 568 0018 90F8FC31 		ldrb	r3, [r0, #508]	@ zero_extendqisi2
+ 569 001c 022B     		cmp	r3, #2
+ 570 001e 02D0     		beq	.L45
+ 571 0020 032B     		cmp	r3, #3
+ 572 0022 15D0     		beq	.L46
+ 573 0024 39E0     		b	.L52
+ 574              	.L45:
+ 508:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {                                			   							   							   				
+ 575              		.loc 1 508 0
+ 576 0026 81B1     		cbz	r1, .L47
+ 510:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         pdev->dev_state = USBD_STATE_CONFIGURED;
+ 577              		.loc 1 510 0
+ 578 0028 4160     		str	r1, [r0, #4]
+ 511:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         if(USBD_SetClassConfig(pdev , cfgidx) == USBD_FAIL)
+ 579              		.loc 1 511 0
+ 580 002a 0323     		movs	r3, #3
+ 581 002c 80F8FC31 		strb	r3, [r0, #508]
+ 512:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         {
+ 582              		.loc 1 512 0
+ 583 0030 FFF7FEFF 		bl	USBD_SetClassConfig
+ 584              	.LVL87:
+ 585 0034 0228     		cmp	r0, #2
+ 586 0036 04D1     		bne	.L48
+ 514:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****           return;
+ 587              		.loc 1 514 0
+ 588 0038 2046     		mov	r0, r4
+ 589 003a 2946     		mov	r1, r5
+ 590 003c FFF7FEFF 		bl	USBD_CtlError
+ARM GAS  /tmp/cc1HyUni.s 			page 26
+
+
+ 591              	.LVL88:
+ 515:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         }
+ 592              		.loc 1 515 0
+ 593 0040 38BD     		pop	{r3, r4, r5, pc}
+ 594              	.LVL89:
+ 595              	.L48:
+ 517:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 596              		.loc 1 517 0
+ 597 0042 2046     		mov	r0, r4
+ 598 0044 FFF7FEFF 		bl	USBD_CtlSendStatus
+ 599              	.LVL90:
+ 600 0048 38BD     		pop	{r3, r4, r5, pc}
+ 601              	.LVL91:
+ 602              	.L47:
+ 521:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 603              		.loc 1 521 0
+ 604 004a FFF7FEFF 		bl	USBD_CtlSendStatus
+ 605              	.LVL92:
+ 606 004e 38BD     		pop	{r3, r4, r5, pc}
+ 607              	.LVL93:
+ 608              	.L46:
+ 526:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {                           
+ 609              		.loc 1 526 0
+ 610 0050 49B9     		cbnz	r1, .L49
+ 528:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         pdev->dev_config = cfgidx;          
+ 611              		.loc 1 528 0
+ 612 0052 0223     		movs	r3, #2
+ 613 0054 80F8FC31 		strb	r3, [r0, #508]
+ 529:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         USBD_ClrClassConfig(pdev , cfgidx);
+ 614              		.loc 1 529 0
+ 615 0058 4160     		str	r1, [r0, #4]
+ 530:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         USBD_CtlSendStatus(pdev);
+ 616              		.loc 1 530 0
+ 617 005a FFF7FEFF 		bl	USBD_ClrClassConfig
+ 618              	.LVL94:
+ 531:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         
+ 619              		.loc 1 531 0
+ 620 005e 2046     		mov	r0, r4
+ 621 0060 FFF7FEFF 		bl	USBD_CtlSendStatus
+ 622              	.LVL95:
+ 623 0064 38BD     		pop	{r3, r4, r5, pc}
+ 624              	.LVL96:
+ 625              	.L49:
+ 534:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 626              		.loc 1 534 0
+ 627 0066 4368     		ldr	r3, [r0, #4]
+ 628 0068 9942     		cmp	r1, r3
+ 629 006a 13D0     		beq	.L50
+ 537:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         
+ 630              		.loc 1 537 0
+ 631 006c D9B2     		uxtb	r1, r3
+ 632 006e FFF7FEFF 		bl	USBD_ClrClassConfig
+ 633              	.LVL97:
+ 540:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         if(USBD_SetClassConfig(pdev , cfgidx) == USBD_FAIL)
+ 634              		.loc 1 540 0
+ 635 0072 0C4B     		ldr	r3, .L54
+ 636 0074 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ARM GAS  /tmp/cc1HyUni.s 			page 27
+
+
+ 637 0076 6160     		str	r1, [r4, #4]
+ 541:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         {
+ 638              		.loc 1 541 0
+ 639 0078 2046     		mov	r0, r4
+ 640 007a FFF7FEFF 		bl	USBD_SetClassConfig
+ 641              	.LVL98:
+ 642 007e 0228     		cmp	r0, #2
+ 643 0080 04D1     		bne	.L51
+ 543:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****           return;
+ 644              		.loc 1 543 0
+ 645 0082 2046     		mov	r0, r4
+ 646 0084 2946     		mov	r1, r5
+ 647 0086 FFF7FEFF 		bl	USBD_CtlError
+ 648              	.LVL99:
+ 544:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         }
+ 649              		.loc 1 544 0
+ 650 008a 38BD     		pop	{r3, r4, r5, pc}
+ 651              	.LVL100:
+ 652              	.L51:
+ 546:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 653              		.loc 1 546 0
+ 654 008c 2046     		mov	r0, r4
+ 655 008e FFF7FEFF 		bl	USBD_CtlSendStatus
+ 656              	.LVL101:
+ 657 0092 38BD     		pop	{r3, r4, r5, pc}
+ 658              	.LVL102:
+ 659              	.L50:
+ 550:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 660              		.loc 1 550 0
+ 661 0094 FFF7FEFF 		bl	USBD_CtlSendStatus
+ 662              	.LVL103:
+ 663 0098 38BD     		pop	{r3, r4, r5, pc}
+ 664              	.LVL104:
+ 665              	.L52:
+ 555:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 666              		.loc 1 555 0
+ 667 009a 2946     		mov	r1, r5
+ 668 009c FFF7FEFF 		bl	USBD_CtlError
+ 669              	.LVL105:
+ 670 00a0 38BD     		pop	{r3, r4, r5, pc}
+ 671              	.LVL106:
+ 672              	.L55:
+ 673 00a2 00BF     		.align	2
+ 674              	.L54:
+ 675 00a4 00000000 		.word	.LANCHOR0
+ 676              		.cfi_endproc
+ 677              	.LFE128:
+ 679              		.section	.text.USBD_GetConfig,"ax",%progbits
+ 680              		.align	2
+ 681              		.thumb
+ 682              		.thumb_func
+ 684              	USBD_GetConfig:
+ 685              	.LFB129:
+ 570:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 686              		.loc 1 570 0
+ 687              		.cfi_startproc
+ 688              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/cc1HyUni.s 			page 28
+
+
+ 689              		@ frame_needed = 0, uses_anonymous_args = 0
+ 690              	.LVL107:
+ 691 0000 08B5     		push	{r3, lr}
+ 692              	.LCFI8:
+ 693              		.cfi_def_cfa_offset 8
+ 694              		.cfi_offset 3, -8
+ 695              		.cfi_offset 14, -4
+ 696 0002 0346     		mov	r3, r0
+ 572:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {                   
+ 697              		.loc 1 572 0
+ 698 0004 CA88     		ldrh	r2, [r1, #6]
+ 699 0006 012A     		cmp	r2, #1
+ 700 0008 02D0     		beq	.L57
+ 574:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 701              		.loc 1 574 0
+ 702 000a FFF7FEFF 		bl	USBD_CtlError
+ 703              	.LVL108:
+ 704 000e 08BD     		pop	{r3, pc}
+ 705              	.LVL109:
+ 706              	.L57:
+ 578:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 707              		.loc 1 578 0
+ 708 0010 90F8FC21 		ldrb	r2, [r0, #508]	@ zero_extendqisi2
+ 709 0014 022A     		cmp	r2, #2
+ 710 0016 02D0     		beq	.L60
+ 711 0018 032A     		cmp	r2, #3
+ 712 001a 08D0     		beq	.L61
+ 713 001c 0CE0     		b	.L62
+ 714              	.L60:
+ 581:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlSendData (pdev, 
+ 715              		.loc 1 581 0
+ 716 001e 0146     		mov	r1, r0
+ 717              	.LVL110:
+ 718 0020 0022     		movs	r2, #0
+ 719 0022 41F8082F 		str	r2, [r1, #8]!
+ 582:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                         (uint8_t *)&pdev->dev_default_config,
+ 720              		.loc 1 582 0
+ 721 0026 0122     		movs	r2, #1
+ 722 0028 FFF7FEFF 		bl	USBD_CtlSendData
+ 723              	.LVL111:
+ 585:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 724              		.loc 1 585 0
+ 725 002c 08BD     		pop	{r3, pc}
+ 726              	.LVL112:
+ 727              	.L61:
+ 589:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                         (uint8_t *)&pdev->dev_config,
+ 728              		.loc 1 589 0
+ 729 002e 191D     		adds	r1, r3, #4
+ 730              	.LVL113:
+ 731 0030 0122     		movs	r2, #1
+ 732 0032 FFF7FEFF 		bl	USBD_CtlSendData
+ 733              	.LVL114:
+ 592:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 734              		.loc 1 592 0
+ 735 0036 08BD     		pop	{r3, pc}
+ 736              	.LVL115:
+ 737              	.L62:
+ARM GAS  /tmp/cc1HyUni.s 			page 29
+
+
+ 595:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 738              		.loc 1 595 0
+ 739 0038 FFF7FEFF 		bl	USBD_CtlError
+ 740              	.LVL116:
+ 741 003c 08BD     		pop	{r3, pc}
+ 742              		.cfi_endproc
+ 743              	.LFE129:
+ 745 003e 00BF     		.section	.text.USBD_GetStatus,"ax",%progbits
+ 746              		.align	2
+ 747              		.thumb
+ 748              		.thumb_func
+ 750              	USBD_GetStatus:
+ 751              	.LFB130:
+ 610:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 752              		.loc 1 610 0
+ 753              		.cfi_startproc
+ 754              		@ args = 0, pretend = 0, frame = 0
+ 755              		@ frame_needed = 0, uses_anonymous_args = 0
+ 756              	.LVL117:
+ 757 0000 08B5     		push	{r3, lr}
+ 758              	.LCFI9:
+ 759              		.cfi_def_cfa_offset 8
+ 760              		.cfi_offset 3, -8
+ 761              		.cfi_offset 14, -4
+ 762 0002 0346     		mov	r3, r0
+ 613:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 763              		.loc 1 613 0
+ 764 0004 90F8FC21 		ldrb	r2, [r0, #508]	@ zero_extendqisi2
+ 765 0008 023A     		subs	r2, r2, #2
+ 766 000a 012A     		cmp	r2, #1
+ 767 000c 0DD8     		bhi	.L65
+ 619:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** #else
+ 768              		.loc 1 619 0
+ 769 000e 0122     		movs	r2, #1
+ 770 0010 C260     		str	r2, [r0, #12]
+ 624:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 771              		.loc 1 624 0
+ 772 0012 D0F80422 		ldr	r2, [r0, #516]
+ 773 0016 0AB1     		cbz	r2, .L67
+ 626:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 774              		.loc 1 626 0
+ 775 0018 0322     		movs	r2, #3
+ 776 001a C260     		str	r2, [r0, #12]
+ 777              	.L67:
+ 629:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                       (uint8_t *)& pdev->dev_config_status,
+ 778              		.loc 1 629 0
+ 779 001c 1846     		mov	r0, r3
+ 780              	.LVL118:
+ 781 001e 03F10C01 		add	r1, r3, #12
+ 782              	.LVL119:
+ 783 0022 0222     		movs	r2, #2
+ 784 0024 FFF7FEFF 		bl	USBD_CtlSendData
+ 785              	.LVL120:
+ 632:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 786              		.loc 1 632 0
+ 787 0028 08BD     		pop	{r3, pc}
+ 788              	.LVL121:
+ARM GAS  /tmp/cc1HyUni.s 			page 30
+
+
+ 789              	.L65:
+ 635:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 790              		.loc 1 635 0
+ 791 002a FFF7FEFF 		bl	USBD_CtlError
+ 792              	.LVL122:
+ 793 002e 08BD     		pop	{r3, pc}
+ 794              		.cfi_endproc
+ 795              	.LFE130:
+ 797              		.section	.text.USBD_ClrFeature,"ax",%progbits
+ 798              		.align	2
+ 799              		.thumb
+ 800              		.thumb_func
+ 802              	USBD_ClrFeature:
+ 803              	.LFB132:
+ 671:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   switch (pdev->dev_state)
+ 804              		.loc 1 671 0
+ 805              		.cfi_startproc
+ 806              		@ args = 0, pretend = 0, frame = 0
+ 807              		@ frame_needed = 0, uses_anonymous_args = 0
+ 808              	.LVL123:
+ 809 0000 10B5     		push	{r4, lr}
+ 810              	.LCFI10:
+ 811              		.cfi_def_cfa_offset 8
+ 812              		.cfi_offset 4, -8
+ 813              		.cfi_offset 14, -4
+ 814 0002 0446     		mov	r4, r0
+ 672:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 815              		.loc 1 672 0
+ 816 0004 90F8FC31 		ldrb	r3, [r0, #508]	@ zero_extendqisi2
+ 817 0008 023B     		subs	r3, r3, #2
+ 818 000a 012B     		cmp	r3, #1
+ 819 000c 0DD8     		bhi	.L71
+ 676:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 820              		.loc 1 676 0
+ 821 000e 4B88     		ldrh	r3, [r1, #2]
+ 822 0010 012B     		cmp	r3, #1
+ 823 0012 0CD1     		bne	.L70
+ 678:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       pdev->pClass->Setup (pdev, req);   
+ 824              		.loc 1 678 0
+ 825 0014 0023     		movs	r3, #0
+ 826 0016 C0F80432 		str	r3, [r0, #516]
+ 679:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlSendStatus(pdev);
+ 827              		.loc 1 679 0
+ 828 001a D0F81432 		ldr	r3, [r0, #532]
+ 829 001e 9B68     		ldr	r3, [r3, #8]
+ 830 0020 9847     		blx	r3
+ 831              	.LVL124:
+ 680:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 832              		.loc 1 680 0
+ 833 0022 2046     		mov	r0, r4
+ 834 0024 FFF7FEFF 		bl	USBD_CtlSendStatus
+ 835              	.LVL125:
+ 836 0028 10BD     		pop	{r4, pc}
+ 837              	.LVL126:
+ 838              	.L71:
+ 685:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 839              		.loc 1 685 0
+ARM GAS  /tmp/cc1HyUni.s 			page 31
+
+
+ 840 002a FFF7FEFF 		bl	USBD_CtlError
+ 841              	.LVL127:
+ 842              	.L70:
+ 843 002e 10BD     		pop	{r4, pc}
+ 844              		.cfi_endproc
+ 845              	.LFE132:
+ 847              		.section	.text.USBD_StdDevReq,"ax",%progbits
+ 848              		.align	2
+ 849              		.global	USBD_StdDevReq
+ 850              		.thumb
+ 851              		.thumb_func
+ 853              	USBD_StdDevReq:
+ 854              	.LFB123:
+ 120:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   USBD_StatusTypeDef ret = USBD_OK;  
+ 855              		.loc 1 120 0
+ 856              		.cfi_startproc
+ 857              		@ args = 0, pretend = 0, frame = 0
+ 858              		@ frame_needed = 0, uses_anonymous_args = 0
+ 859              	.LVL128:
+ 860 0000 08B5     		push	{r3, lr}
+ 861              	.LCFI11:
+ 862              		.cfi_def_cfa_offset 8
+ 863              		.cfi_offset 3, -8
+ 864              		.cfi_offset 14, -4
+ 865              	.LVL129:
+ 123:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 866              		.loc 1 123 0
+ 867 0002 4B78     		ldrb	r3, [r1, #1]	@ zero_extendqisi2
+ 868 0004 092B     		cmp	r3, #9
+ 869 0006 1BD8     		bhi	.L76
+ 870 0008 DFE803F0 		tbb	[pc, r3]
+ 871              	.L78:
+ 872 000c 11       		.byte	(.L77-.L78)/2
+ 873 000d 17       		.byte	(.L79-.L78)/2
+ 874 000e 1A       		.byte	(.L76-.L78)/2
+ 875 000f 14       		.byte	(.L80-.L78)/2
+ 876 0010 1A       		.byte	(.L76-.L78)/2
+ 877 0011 08       		.byte	(.L81-.L78)/2
+ 878 0012 05       		.byte	(.L82-.L78)/2
+ 879 0013 1A       		.byte	(.L76-.L78)/2
+ 880 0014 0E       		.byte	(.L83-.L78)/2
+ 881 0015 0B       		.byte	(.L84-.L78)/2
+ 882              		.p2align 1
+ 883              	.L82:
+ 127:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 884              		.loc 1 127 0
+ 885 0016 FFF7FEFF 		bl	USBD_GetDescriptor
+ 886              	.LVL130:
+ 128:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 887              		.loc 1 128 0
+ 888 001a 13E0     		b	.L85
+ 889              	.LVL131:
+ 890              	.L81:
+ 131:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 891              		.loc 1 131 0
+ 892 001c FFF7FEFF 		bl	USBD_SetAddress
+ 893              	.LVL132:
+ARM GAS  /tmp/cc1HyUni.s 			page 32
+
+
+ 132:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 894              		.loc 1 132 0
+ 895 0020 10E0     		b	.L85
+ 896              	.LVL133:
+ 897              	.L84:
+ 135:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 898              		.loc 1 135 0
+ 899 0022 FFF7FEFF 		bl	USBD_SetConfig
+ 900              	.LVL134:
+ 136:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 901              		.loc 1 136 0
+ 902 0026 0DE0     		b	.L85
+ 903              	.LVL135:
+ 904              	.L83:
+ 139:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 905              		.loc 1 139 0
+ 906 0028 FFF7FEFF 		bl	USBD_GetConfig
+ 907              	.LVL136:
+ 140:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 908              		.loc 1 140 0
+ 909 002c 0AE0     		b	.L85
+ 910              	.LVL137:
+ 911              	.L77:
+ 143:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 912              		.loc 1 143 0
+ 913 002e FFF7FEFF 		bl	USBD_GetStatus
+ 914              	.LVL138:
+ 144:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 915              		.loc 1 144 0
+ 916 0032 07E0     		b	.L85
+ 917              	.LVL139:
+ 918              	.L80:
+ 148:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 919              		.loc 1 148 0
+ 920 0034 FFF7FEFF 		bl	USBD_SetFeature
+ 921              	.LVL140:
+ 149:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 922              		.loc 1 149 0
+ 923 0038 04E0     		b	.L85
+ 924              	.LVL141:
+ 925              	.L79:
+ 152:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 926              		.loc 1 152 0
+ 927 003a FFF7FEFF 		bl	USBD_ClrFeature
+ 928              	.LVL142:
+ 153:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 929              		.loc 1 153 0
+ 930 003e 01E0     		b	.L85
+ 931              	.LVL143:
+ 932              	.L76:
+ 156:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 933              		.loc 1 156 0
+ 934 0040 FFF7FEFF 		bl	USBD_CtlError
+ 935              	.LVL144:
+ 936              	.L85:
+ 161:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 937              		.loc 1 161 0
+ARM GAS  /tmp/cc1HyUni.s 			page 33
+
+
+ 938 0044 0020     		movs	r0, #0
+ 939 0046 08BD     		pop	{r3, pc}
+ 940              		.cfi_endproc
+ 941              	.LFE123:
+ 943              		.section	.text.USBD_StdItfReq,"ax",%progbits
+ 944              		.align	2
+ 945              		.global	USBD_StdItfReq
+ 946              		.thumb
+ 947              		.thumb_func
+ 949              	USBD_StdItfReq:
+ 950              	.LFB124:
+ 171:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   USBD_StatusTypeDef ret = USBD_OK; 
+ 951              		.loc 1 171 0
+ 952              		.cfi_startproc
+ 953              		@ args = 0, pretend = 0, frame = 0
+ 954              		@ frame_needed = 0, uses_anonymous_args = 0
+ 955              	.LVL145:
+ 956 0000 38B5     		push	{r3, r4, r5, lr}
+ 957              	.LCFI12:
+ 958              		.cfi_def_cfa_offset 16
+ 959              		.cfi_offset 3, -16
+ 960              		.cfi_offset 4, -12
+ 961              		.cfi_offset 5, -8
+ 962              		.cfi_offset 14, -4
+ 963 0002 0446     		mov	r4, r0
+ 964 0004 0D46     		mov	r5, r1
+ 965              	.LVL146:
+ 174:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 966              		.loc 1 174 0
+ 967 0006 90F8FC31 		ldrb	r3, [r0, #508]	@ zero_extendqisi2
+ 968 000a 032B     		cmp	r3, #3
+ 969 000c 0FD1     		bne	.L92
+ 178:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 970              		.loc 1 178 0
+ 971 000e 0B79     		ldrb	r3, [r1, #4]	@ zero_extendqisi2
+ 972 0010 012B     		cmp	r3, #1
+ 973 0012 09D8     		bhi	.L90
+ 180:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 974              		.loc 1 180 0
+ 975 0014 D0F81432 		ldr	r3, [r0, #532]
+ 976 0018 9B68     		ldr	r3, [r3, #8]
+ 977 001a 9847     		blx	r3
+ 978              	.LVL147:
+ 182:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 979              		.loc 1 182 0
+ 980 001c EB88     		ldrh	r3, [r5, #6]
+ 981 001e 43B9     		cbnz	r3, .L91
+ 184:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 982              		.loc 1 184 0
+ 983 0020 2046     		mov	r0, r4
+ 984 0022 FFF7FEFF 		bl	USBD_CtlSendStatus
+ 985              	.LVL148:
+ 986 0026 04E0     		b	.L91
+ 987              	.LVL149:
+ 988              	.L90:
+ 189:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 989              		.loc 1 189 0
+ARM GAS  /tmp/cc1HyUni.s 			page 34
+
+
+ 990 0028 FFF7FEFF 		bl	USBD_CtlError
+ 991              	.LVL150:
+ 992 002c 01E0     		b	.L91
+ 993              	.LVL151:
+ 994              	.L92:
+ 194:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     break;
+ 995              		.loc 1 194 0
+ 996 002e FFF7FEFF 		bl	USBD_CtlError
+ 997              	.LVL152:
+ 998              	.L91:
+ 198:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** 
+ 999              		.loc 1 198 0
+ 1000 0032 0020     		movs	r0, #0
+ 1001 0034 38BD     		pop	{r3, r4, r5, pc}
+ 1002              		.cfi_endproc
+ 1003              	.LFE124:
+ 1005 0036 00BF     		.section	.text.USBD_StdEPReq,"ax",%progbits
+ 1006              		.align	2
+ 1007              		.global	USBD_StdEPReq
+ 1008              		.thumb
+ 1009              		.thumb_func
+ 1011              	USBD_StdEPReq:
+ 1012              	.LFB125:
+ 208:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 1013              		.loc 1 208 0
+ 1014              		.cfi_startproc
+ 1015              		@ args = 0, pretend = 0, frame = 0
+ 1016              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1017              	.LVL153:
+ 1018 0000 38B5     		push	{r3, r4, r5, lr}
+ 1019              	.LCFI13:
+ 1020              		.cfi_def_cfa_offset 16
+ 1021              		.cfi_offset 3, -16
+ 1022              		.cfi_offset 4, -12
+ 1023              		.cfi_offset 5, -8
+ 1024              		.cfi_offset 14, -4
+ 1025 0002 0546     		mov	r5, r0
+ 1026 0004 0C46     		mov	r4, r1
+ 1027              	.LVL154:
+ 213:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   
+ 1028              		.loc 1 213 0
+ 1029 0006 8A88     		ldrh	r2, [r1, #4]
+ 1030 0008 D1B2     		uxtb	r1, r2
+ 1031              	.LVL155:
+ 216:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 1032              		.loc 1 216 0
+ 1033 000a 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 1034 000c 03F06003 		and	r3, r3, #96
+ 1035 0010 202B     		cmp	r3, #32
+ 1036 0012 05D1     		bne	.L95
+ 218:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 1037              		.loc 1 218 0
+ 1038 0014 D0F81432 		ldr	r3, [r0, #532]
+ 1039 0018 9B68     		ldr	r3, [r3, #8]
+ 1040 001a 2146     		mov	r1, r4
+ 1041              	.LVL156:
+ 1042 001c 9847     		blx	r3
+ARM GAS  /tmp/cc1HyUni.s 			page 35
+
+
+ 1043              	.LVL157:
+ 220:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   }
+ 1044              		.loc 1 220 0
+ 1045 001e 7BE0     		b	.L96
+ 1046              	.LVL158:
+ 1047              	.L95:
+ 223:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 1048              		.loc 1 223 0
+ 1049 0020 6378     		ldrb	r3, [r4, #1]	@ zero_extendqisi2
+ 1050 0022 012B     		cmp	r3, #1
+ 1051 0024 26D0     		beq	.L97
+ 1052 0026 002B     		cmp	r3, #0
+ 1053 0028 48D0     		beq	.L98
+ 1054 002a 032B     		cmp	r3, #3
+ 1055 002c 74D1     		bne	.L96
+ 228:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 1056              		.loc 1 228 0
+ 1057 002e 90F8FC31 		ldrb	r3, [r0, #508]	@ zero_extendqisi2
+ 1058 0032 022B     		cmp	r3, #2
+ 1059 0034 02D0     		beq	.L101
+ 1060 0036 032B     		cmp	r3, #3
+ 1061 0038 07D0     		beq	.L102
+ 1062 003a 17E0     		b	.L115
+ 1063              	.L101:
+ 231:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 1064              		.loc 1 231 0
+ 1065 003c 0029     		cmp	r1, #0
+ 1066 003e 6BD0     		beq	.L96
+ 231:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 1067              		.loc 1 231 0 is_stmt 0 discriminator 1
+ 1068 0040 8029     		cmp	r1, #128
+ 1069 0042 69D0     		beq	.L96
+ 233:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 1070              		.loc 1 233 0 is_stmt 1
+ 1071 0044 FFF7FEFF 		bl	USBD_LL_StallEP
+ 1072              	.LVL159:
+ 1073 0048 66E0     		b	.L96
+ 1074              	.LVL160:
+ 1075              	.L102:
+ 238:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 1076              		.loc 1 238 0
+ 1077 004a 6388     		ldrh	r3, [r4, #2]
+ 1078 004c 23B9     		cbnz	r3, .L103
+ 240:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         { 
+ 1079              		.loc 1 240 0
+ 1080 004e 19B1     		cbz	r1, .L103
+ 240:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         { 
+ 1081              		.loc 1 240 0 is_stmt 0 discriminator 1
+ 1082 0050 8029     		cmp	r1, #128
+ 1083 0052 01D0     		beq	.L103
+ 242:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****           
+ 1084              		.loc 1 242 0 is_stmt 1
+ 1085 0054 FFF7FEFF 		bl	USBD_LL_StallEP
+ 1086              	.LVL161:
+ 1087              	.L103:
+ 246:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       USBD_CtlSendStatus(pdev);
+ 1088              		.loc 1 246 0
+ARM GAS  /tmp/cc1HyUni.s 			page 36
+
+
+ 1089 0058 D5F81432 		ldr	r3, [r5, #532]
+ 1090 005c 9B68     		ldr	r3, [r3, #8]
+ 1091 005e 2846     		mov	r0, r5
+ 1092 0060 2146     		mov	r1, r4
+ 1093 0062 9847     		blx	r3
+ 1094              	.LVL162:
+ 247:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 1095              		.loc 1 247 0
+ 1096 0064 2846     		mov	r0, r5
+ 1097 0066 FFF7FEFF 		bl	USBD_CtlSendStatus
+ 1098              	.LVL163:
+ 249:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 1099              		.loc 1 249 0
+ 1100 006a 55E0     		b	.L96
+ 1101              	.LVL164:
+ 1102              	.L115:
+ 252:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;    
+ 1103              		.loc 1 252 0
+ 1104 006c 2146     		mov	r1, r4
+ 1105              	.LVL165:
+ 1106 006e FFF7FEFF 		bl	USBD_CtlError
+ 1107              	.LVL166:
+ 253:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 1108              		.loc 1 253 0
+ 1109 0072 51E0     		b	.L96
+ 1110              	.LVL167:
+ 1111              	.L97:
+ 259:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 1112              		.loc 1 259 0
+ 1113 0074 90F8FC31 		ldrb	r3, [r0, #508]	@ zero_extendqisi2
+ 1114 0078 022B     		cmp	r3, #2
+ 1115 007a 02D0     		beq	.L105
+ 1116 007c 032B     		cmp	r3, #3
+ 1117 007e 07D0     		beq	.L106
+ 1118 0080 18E0     		b	.L116
+ 1119              	.L105:
+ 262:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 1120              		.loc 1 262 0
+ 1121 0082 0029     		cmp	r1, #0
+ 1122 0084 48D0     		beq	.L96
+ 262:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 1123              		.loc 1 262 0 is_stmt 0 discriminator 1
+ 1124 0086 8029     		cmp	r1, #128
+ 1125 0088 46D0     		beq	.L96
+ 264:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 1126              		.loc 1 264 0 is_stmt 1
+ 1127 008a FFF7FEFF 		bl	USBD_LL_StallEP
+ 1128              	.LVL168:
+ 1129 008e 43E0     		b	.L96
+ 1130              	.LVL169:
+ 1131              	.L106:
+ 269:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 1132              		.loc 1 269 0
+ 1133 0090 6388     		ldrh	r3, [r4, #2]
+ 1134 0092 002B     		cmp	r3, #0
+ 1135 0094 40D1     		bne	.L96
+ 271:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         {        
+ARM GAS  /tmp/cc1HyUni.s 			page 37
+
+
+ 1136              		.loc 1 271 0
+ 1137 0096 11F07F0F 		tst	r1, #127
+ 1138 009a 07D0     		beq	.L107
+ 273:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****           pdev->pClass->Setup (pdev, req);
+ 1139              		.loc 1 273 0
+ 1140 009c FFF7FEFF 		bl	USBD_LL_ClearStallEP
+ 1141              	.LVL170:
+ 274:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****         }
+ 1142              		.loc 1 274 0
+ 1143 00a0 D5F81432 		ldr	r3, [r5, #532]
+ 1144 00a4 9B68     		ldr	r3, [r3, #8]
+ 1145 00a6 2846     		mov	r0, r5
+ 1146 00a8 2146     		mov	r1, r4
+ 1147 00aa 9847     		blx	r3
+ 1148              	.LVL171:
+ 1149              	.L107:
+ 276:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 1150              		.loc 1 276 0
+ 1151 00ac 2846     		mov	r0, r5
+ 1152 00ae FFF7FEFF 		bl	USBD_CtlSendStatus
+ 1153              	.LVL172:
+ 1154 00b2 31E0     		b	.L96
+ 1155              	.LVL173:
+ 1156              	.L116:
+ 281:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;    
+ 1157              		.loc 1 281 0
+ 1158 00b4 2146     		mov	r1, r4
+ 1159              	.LVL174:
+ 1160 00b6 FFF7FEFF 		bl	USBD_CtlError
+ 1161              	.LVL175:
+ 282:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 1162              		.loc 1 282 0
+ 1163 00ba 2DE0     		b	.L96
+ 1164              	.LVL176:
+ 1165              	.L98:
+ 287:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 1166              		.loc 1 287 0
+ 1167 00bc 90F8FC31 		ldrb	r3, [r0, #508]	@ zero_extendqisi2
+ 1168 00c0 022B     		cmp	r3, #2
+ 1169 00c2 02D0     		beq	.L109
+ 1170 00c4 032B     		cmp	r3, #3
+ 1171 00c6 06D0     		beq	.L110
+ 1172 00c8 23E0     		b	.L117
+ 1173              	.L109:
+ 290:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 1174              		.loc 1 290 0
+ 1175 00ca 11F07F0F 		tst	r1, #127
+ 1176 00ce 23D0     		beq	.L96
+ 292:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 1177              		.loc 1 292 0
+ 1178 00d0 FFF7FEFF 		bl	USBD_LL_StallEP
+ 1179              	.LVL177:
+ 1180 00d4 20E0     		b	.L96
+ 1181              	.LVL178:
+ 1182              	.L110:
+ 297:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                                          &pdev->ep_out[ep_addr & 0x7F];
+ 1183              		.loc 1 297 0
+ARM GAS  /tmp/cc1HyUni.s 			page 38
+
+
+ 1184 00d6 12F0800F 		tst	r2, #128
+ 1185 00da 05D0     		beq	.L111
+ 297:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                                          &pdev->ep_out[ep_addr & 0x7F];
+ 1186              		.loc 1 297 0 is_stmt 0 discriminator 1
+ 1187 00dc 01F07F04 		and	r4, r1, #127
+ 1188              	.LVL179:
+ 1189 00e0 00EB0414 		add	r4, r0, r4, lsl #4
+ 1190 00e4 1434     		adds	r4, r4, #20
+ 1191 00e6 05E0     		b	.L112
+ 1192              	.LVL180:
+ 1193              	.L111:
+ 298:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       if(USBD_LL_IsStallEP(pdev, ep_addr))
+ 1194              		.loc 1 298 0 is_stmt 1 discriminator 2
+ 1195 00e8 01F07F04 		and	r4, r1, #127
+ 1196              	.LVL181:
+ 297:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                                          &pdev->ep_out[ep_addr & 0x7F];
+ 1197              		.loc 1 297 0 discriminator 2
+ 1198 00ec 00EB0414 		add	r4, r0, r4, lsl #4
+ 1199 00f0 04F58274 		add	r4, r4, #260
+ 1200              	.L112:
+ 1201              	.LVL182:
+ 299:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       {
+ 1202              		.loc 1 299 0 discriminator 4
+ 1203 00f4 2846     		mov	r0, r5
+ 1204              	.LVL183:
+ 1205 00f6 FFF7FEFF 		bl	USBD_LL_IsStallEP
+ 1206              	.LVL184:
+ 1207 00fa 10B1     		cbz	r0, .L113
+ 301:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 1208              		.loc 1 301 0
+ 1209 00fc 0123     		movs	r3, #1
+ 1210 00fe 2360     		str	r3, [r4]
+ 1211 0100 01E0     		b	.L114
+ 1212              	.L113:
+ 305:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       }
+ 1213              		.loc 1 305 0
+ 1214 0102 0023     		movs	r3, #0
+ 1215 0104 2360     		str	r3, [r4]
+ 1216              	.L114:
+ 308:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****                         (uint8_t *)&pep->status,
+ 1217              		.loc 1 308 0
+ 1218 0106 2846     		mov	r0, r5
+ 1219 0108 2146     		mov	r1, r4
+ 1220 010a 0222     		movs	r2, #2
+ 1221 010c FFF7FEFF 		bl	USBD_CtlSendData
+ 1222              	.LVL185:
+ 311:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       
+ 1223              		.loc 1 311 0
+ 1224 0110 02E0     		b	.L96
+ 1225              	.LVL186:
+ 1226              	.L117:
+ 314:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       break;
+ 1227              		.loc 1 314 0
+ 1228 0112 2146     		mov	r1, r4
+ 1229              	.LVL187:
+ 1230 0114 FFF7FEFF 		bl	USBD_CtlError
+ 1231              	.LVL188:
+ARM GAS  /tmp/cc1HyUni.s 			page 39
+
+
+ 1232              	.L96:
+ 323:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c **** /**
+ 1233              		.loc 1 323 0
+ 1234 0118 0020     		movs	r0, #0
+ 1235 011a 38BD     		pop	{r3, r4, r5, pc}
+ 1236              		.cfi_endproc
+ 1237              	.LFE125:
+ 1239              		.section	.text.USBD_GetString,"ax",%progbits
+ 1240              		.align	2
+ 1241              		.global	USBD_GetString
+ 1242              		.thumb
+ 1243              		.thumb_func
+ 1245              	USBD_GetString:
+ 1246              	.LFB135:
+ 733:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   uint8_t idx = 0;
+ 1247              		.loc 1 733 0
+ 1248              		.cfi_startproc
+ 1249              		@ args = 0, pretend = 0, frame = 0
+ 1250              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1251              	.LVL189:
+ 736:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   {
+ 1252              		.loc 1 736 0
+ 1253 0000 D0B1     		cbz	r0, .L124
+ 733:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****   uint8_t idx = 0;
+ 1254              		.loc 1 733 0
+ 1255 0002 70B5     		push	{r4, r5, r6, lr}
+ 1256              	.LCFI14:
+ 1257              		.cfi_def_cfa_offset 16
+ 1258              		.cfi_offset 4, -16
+ 1259              		.cfi_offset 5, -12
+ 1260              		.cfi_offset 6, -8
+ 1261              		.cfi_offset 14, -4
+ 1262 0004 0D46     		mov	r5, r1
+ 1263 0006 1646     		mov	r6, r2
+ 1264 0008 0446     		mov	r4, r0
+ 738:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     unicode[idx++] = *len;
+ 1265              		.loc 1 738 0
+ 1266 000a FFF7FEFF 		bl	USBD_GetLen
+ 1267              	.LVL190:
+ 1268 000e 0130     		adds	r0, r0, #1
+ 1269 0010 4000     		lsls	r0, r0, #1
+ 1270 0012 80B2     		uxth	r0, r0
+ 1271 0014 3080     		strh	r0, [r6]	@ movhi
+ 1272              	.LVL191:
+ 739:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     unicode[idx++] =  USB_DESC_TYPE_STRING;
+ 1273              		.loc 1 739 0
+ 1274 0016 2870     		strb	r0, [r5]
+ 1275              	.LVL192:
+ 740:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     
+ 1276              		.loc 1 740 0
+ 1277 0018 0323     		movs	r3, #3
+ 1278 001a 6B70     		strb	r3, [r5, #1]
+ 1279 001c 0223     		movs	r3, #2
+ 742:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 1280              		.loc 1 742 0
+ 1281 001e 07E0     		b	.L121
+ 1282              	.LVL193:
+ARM GAS  /tmp/cc1HyUni.s 			page 40
+
+
+ 1283              	.L122:
+ 744:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****       unicode[idx++] =  0x00;
+ 1284              		.loc 1 744 0
+ 1285 0020 5A1C     		adds	r2, r3, #1
+ 1286 0022 D2B2     		uxtb	r2, r2
+ 1287              	.LVL194:
+ 1288 0024 0134     		adds	r4, r4, #1
+ 1289              	.LVL195:
+ 1290 0026 E954     		strb	r1, [r5, r3]
+ 745:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     }
+ 1291              		.loc 1 745 0
+ 1292 0028 531C     		adds	r3, r2, #1
+ 1293 002a DBB2     		uxtb	r3, r3
+ 1294              	.LVL196:
+ 1295 002c 0021     		movs	r1, #0
+ 1296 002e A954     		strb	r1, [r5, r2]
+ 1297              	.LVL197:
+ 1298              	.L121:
+ 742:Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c ****     {
+ 1299              		.loc 1 742 0
+ 1300 0030 2178     		ldrb	r1, [r4]	@ zero_extendqisi2
+ 1301 0032 0029     		cmp	r1, #0
+ 1302 0034 F4D1     		bne	.L122
+ 1303 0036 70BD     		pop	{r4, r5, r6, pc}
+ 1304              	.LVL198:
+ 1305              	.L124:
+ 1306              	.LCFI15:
+ 1307              		.cfi_def_cfa_offset 0
+ 1308              		.cfi_restore 4
+ 1309              		.cfi_restore 5
+ 1310              		.cfi_restore 6
+ 1311              		.cfi_restore 14
+ 1312 0038 7047     		bx	lr
+ 1313              		.cfi_endproc
+ 1314              	.LFE135:
+ 1316 003a 00BF     		.section	.bss.cfgidx.8272,"aw",%nobits
+ 1317              		.set	.LANCHOR0,. + 0
+ 1320              	cfgidx.8272:
+ 1321 0000 00       		.space	1
+ 1322              		.text
+ 1323              	.Letext0:
+ 1324              		.file 2 "/usr/include/newlib/machine/_default_types.h"
+ 1325              		.file 3 "/usr/include/newlib/sys/_stdint.h"
+ 1326              		.file 4 "Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h"
+ 1327              		.file 5 "Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h"
+ 1328              		.file 6 "Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h"
+ 1329              		.file 7 "Drivers/CMSIS/Include/core_cm4.h"
+ARM GAS  /tmp/cc1HyUni.s 			page 41
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 usbd_ctlreq.c
+     /tmp/cc1HyUni.s:21     .text.USBD_GetLen:00000000 $t
+     /tmp/cc1HyUni.s:25     .text.USBD_GetLen:00000000 USBD_GetLen
+     /tmp/cc1HyUni.s:62     .text.USBD_SetFeature:00000000 $t
+     /tmp/cc1HyUni.s:66     .text.USBD_SetFeature:00000000 USBD_SetFeature
+     /tmp/cc1HyUni.s:107    .text.USBD_ParseSetupRequest:00000000 $t
+     /tmp/cc1HyUni.s:112    .text.USBD_ParseSetupRequest:00000000 USBD_ParseSetupRequest
+     /tmp/cc1HyUni.s:146    .text.USBD_CtlError:00000000 $t
+     /tmp/cc1HyUni.s:151    .text.USBD_CtlError:00000000 USBD_CtlError
+     /tmp/cc1HyUni.s:179    .text.USBD_GetDescriptor:00000000 $t
+     /tmp/cc1HyUni.s:183    .text.USBD_GetDescriptor:00000000 USBD_GetDescriptor
+     /tmp/cc1HyUni.s:210    .text.USBD_GetDescriptor:00000018 $d
+     /tmp/cc1HyUni.s:272    .text.USBD_GetDescriptor:00000068 $d
+     /tmp/cc1HyUni.s:278    .text.USBD_GetDescriptor:0000006e $t
+     /tmp/cc1HyUni.s:458    .text.USBD_SetAddress:00000000 $t
+     /tmp/cc1HyUni.s:462    .text.USBD_SetAddress:00000000 USBD_SetAddress
+     /tmp/cc1HyUni.s:532    .text.USBD_SetConfig:00000000 $t
+     /tmp/cc1HyUni.s:536    .text.USBD_SetConfig:00000000 USBD_SetConfig
+     /tmp/cc1HyUni.s:675    .text.USBD_SetConfig:000000a4 $d
+     /tmp/cc1HyUni.s:680    .text.USBD_GetConfig:00000000 $t
+     /tmp/cc1HyUni.s:684    .text.USBD_GetConfig:00000000 USBD_GetConfig
+     /tmp/cc1HyUni.s:746    .text.USBD_GetStatus:00000000 $t
+     /tmp/cc1HyUni.s:750    .text.USBD_GetStatus:00000000 USBD_GetStatus
+     /tmp/cc1HyUni.s:798    .text.USBD_ClrFeature:00000000 $t
+     /tmp/cc1HyUni.s:802    .text.USBD_ClrFeature:00000000 USBD_ClrFeature
+     /tmp/cc1HyUni.s:848    .text.USBD_StdDevReq:00000000 $t
+     /tmp/cc1HyUni.s:853    .text.USBD_StdDevReq:00000000 USBD_StdDevReq
+     /tmp/cc1HyUni.s:872    .text.USBD_StdDevReq:0000000c $d
+     /tmp/cc1HyUni.s:882    .text.USBD_StdDevReq:00000016 $t
+     /tmp/cc1HyUni.s:944    .text.USBD_StdItfReq:00000000 $t
+     /tmp/cc1HyUni.s:949    .text.USBD_StdItfReq:00000000 USBD_StdItfReq
+     /tmp/cc1HyUni.s:1006   .text.USBD_StdEPReq:00000000 $t
+     /tmp/cc1HyUni.s:1011   .text.USBD_StdEPReq:00000000 USBD_StdEPReq
+     /tmp/cc1HyUni.s:1240   .text.USBD_GetString:00000000 $t
+     /tmp/cc1HyUni.s:1245   .text.USBD_GetString:00000000 USBD_GetString
+     /tmp/cc1HyUni.s:1320   .bss.cfgidx.8272:00000000 cfgidx.8272
+     /tmp/cc1HyUni.s:1321   .bss.cfgidx.8272:00000000 $d
+                     .debug_frame:00000010 $d
+     /tmp/cc1HyUni.s:217    .text.USBD_GetDescriptor:0000001f $d
+     /tmp/cc1HyUni.s:217    .text.USBD_GetDescriptor:00000020 $t
+
+UNDEFINED SYMBOLS
+USBD_CtlSendStatus
+USBD_LL_StallEP
+USBD_CtlSendData
+USBD_LL_SetUSBAddress
+USBD_SetClassConfig
+USBD_ClrClassConfig
+USBD_LL_ClearStallEP
+USBD_LL_IsStallEP
